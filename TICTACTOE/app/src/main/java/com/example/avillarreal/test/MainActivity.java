@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //TODO: Create the retrieve php file. And work on the another class to retrieve the file - Vishal
+        //TODO: Look up other ways to coordinate the TicTacToe game through php and sqlOnline - Vishal
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
