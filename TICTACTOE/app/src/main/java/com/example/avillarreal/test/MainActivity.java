@@ -1,38 +1,47 @@
 package com.example.avillarreal.test;
 
 
-import android.app.AlertDialog;
+import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.w3c.dom.Text;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener{
 
+    public final static String player1_score="com.example.avillarreal.test.MainActivity.player1score";
+    public final static String player2_score="com.example.avillarreal.test.MainActivity.player2score";
+
+    private static final String SavedP1score = "playerscore1";
+    private static final String SavedP2score = "playerscore2";
+
     Button a1,a2,a3,b1,b2,b3,c1,c2,c3;
     Button[] button_array;
-    //This is AWESOMEMEEEEEEEE
 
     boolean turn=true;//X=true
     int turnC=0;
+    int mPlayer1_score=0;
+    int mPlayer2_score=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,66 +60,17 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
         for (Button b : button_array) {
             b.setOnClickListener(this);
+        }
 
+        if (savedInstanceState != null){
+            mPlayer1_score=savedInstanceState.getInt(SavedP1score);
+            mPlayer2_score=savedInstanceState.getInt(SavedP2score);
         }
     }
 
         public void onClick(View v){
             Button b= (Button) v;
             button_clicked(b);
-            final String A1 = a1.getText().toString();
-            final String A2 = a2.getText().toString();
-            final String A3 = a3.getText().toString();
-            final String B1 = b1.getText().toString();
-            final String B2 = b2.getText().toString();
-            final String B3 = b3.getText().toString();
-            final String C1 = c1.getText().toString();
-            final String C2 = c2.getText().toString();
-            final String C3 = c3.getText().toString();
-            Response.Listener<String> responseListener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        boolean success = jsonResponse.getBoolean("success");
-
-                        if(success){
-                            String A1 = jsonResponse.getString("A1");
-                            String A2 = jsonResponse.getString("A2");
-                            String A3 = jsonResponse.getString("A3");
-                            String B1 = jsonResponse.getString("B1");
-                            String B2 = jsonResponse.getString("B2");
-                            String B3 = jsonResponse.getString("B3");
-                            String C1 = jsonResponse.getString("C1");
-                            String C2 = jsonResponse.getString("C2");
-                            String C3 = jsonResponse.getString("C3");
-                            button_array[0].setText(A1);
-                            button_array[1].setText(A2);
-                            button_array[2].setText(A3);
-                            button_array[3].setText(B1);
-                            button_array[4].setText(B2);
-                            button_array[5].setText(B3);
-                            button_array[6].setText(C1);
-                            button_array[7].setText(C2);
-                            button_array[8].setText(C3);
-                        }
-                        else{
-                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                            builder.setMessage("Please Select another tile");
-                            builder.setNegativeButton("Retry",null);
-                            builder.create();
-                            builder.show();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            };
-            ArrayTTC original = new ArrayTTC(A1,A2,A3,B1,B2,B3,C1,C2,C3, responseListener);
-            RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-            queue.add(original);
         }
 
     public void button_clicked(Button b){
@@ -120,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         else{
             b.setText("O");
         }
+        turnC++;
         b.setClickable(false);
         turn=!turn;
 
@@ -158,12 +119,27 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             winner = true;
         }
 
+
         if(winner){
-            if(!turn)
+            if(!turn) {
                 toast("Player 1 Wins");
-            else
+                mPlayer1_score=mPlayer1_score+1;
+            }else {
                 toast("Player 2 Wins");
-            ButtonEnable(false);
+                mPlayer2_score=mPlayer2_score+1;
+            }ButtonEnable(false);
+        }
+        else if(turnC==9){
+            toast("DRAW!");
+        }
+
+
+       if(winner==true || turnC==9){
+       Intent intent = new Intent(MainActivity.this,Leaderboard.class);
+        intent.putExtra(player1_score,String.valueOf(mPlayer1_score));
+        intent.putExtra(player2_score, String.valueOf(mPlayer2_score));
+
+        startActivity(intent);
         }
 
     }
@@ -171,10 +147,28 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     private void ButtonEnable(boolean enable){
         for(Button b:button_array){
             b.setClickable(enable);
+            if(enable)
+                b.setText("");
         }
+
     }
     private void toast(String message){
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt(SavedP1score,mPlayer1_score);
+        savedInstanceState.putInt(SavedP2score,mPlayer2_score);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore state members from saved instance
+        mPlayer1_score = savedInstanceState.getInt(SavedP1score);
+        mPlayer2_score = savedInstanceState.getInt(SavedP2score);
     }
 
     @Override
@@ -197,5 +191,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }
