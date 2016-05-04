@@ -31,6 +31,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     Button a1,a2,a3,b1,b2,b3,c1,c2,c3;
     Button[] button_array;
+<<<<<<< HEAD
+=======
+    //This is AWESOMEMEEEEEEEE
+    // This is Eric Reyna's Disturbing Laptop
+>>>>>>> origin/master
 
     boolean turn=true;//X=true
     int turnC=0;
