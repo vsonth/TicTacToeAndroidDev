@@ -31,16 +31,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     Button a1,a2,a3,b1,b2,b3,c1,c2,c3;
     Button[] button_array;
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
     //This is AWESOMEMEEEEEEEE
     // This is Eric Reyna's Disturbing Laptop
->>>>>>> origin/master
+//>>>>>>> origin/master
 
-    boolean turn=true;//X=true
-    int turnC=0;
-    int mPlayer1_score=0;
-    int mPlayer2_score=0;
+    boolean turn=true;   //X=true
+    int turnC=0;        //Tracks how many turns have passed (0-9) before game ends
+    int mPlayer1_score=0;//Score for player 1 that can be added to database
+    int mPlayer2_score=0;//Score for player 2 that can be added to database
 
 
     @Override
@@ -48,13 +48,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
         //TODO: Create the retrieve php file. And work on the another class to retrieve the file - Vishal
         //TODO: Look up other ways to coordinate the TicTacToe game through php and sqlOnline - Vishal
 
 
->>>>>>> origin/master
+//>>>>>>> origin/master
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             b.setOnClickListener(this);
         }
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null){  //Keeps the score for when you flip screen
             mPlayer1_score=savedInstanceState.getInt(SavedP1score);
             mPlayer2_score=savedInstanceState.getInt(SavedP2score);
         }
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             button_clicked(b);
         }
 
-    public void button_clicked(Button b){
+    public void button_clicked(Button b){ //This is to place the x and o's on the tiles
         if (turn){
         b.setText("X");
         }
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         checkifWon();
     }
 
-    public void checkifWon(){
+    public void checkifWon(){ //Checks every combination to see if someone wins
 
         boolean winner=false;
         //check row
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         }
 
 
-        if(winner){
+        if(winner){ //If there is a winner, score adds +1 to last player and toasts win message
             if(!turn) {
                 toast("Player 1 Wins");
                 mPlayer1_score=mPlayer1_score+1;
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         }
 
 
-       if(winner==true || turnC==9){
+       if(winner==true || turnC==9){ //Sends to leaderboard page
        Intent intent = new Intent(MainActivity.this,Leaderboard.class);
         intent.putExtra(player1_score,String.valueOf(mPlayer1_score));
         intent.putExtra(player2_score, String.valueOf(mPlayer2_score));
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     }
 
-    private void ButtonEnable(boolean enable){
+    private void ButtonEnable(boolean enable){ //After a win, it disables the buttons
         for(Button b:button_array){
             b.setClickable(enable);
             if(enable)
