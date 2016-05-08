@@ -31,9 +31,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     Button a1,a2,a3,b1,b2,b3,c1,c2,c3;
     Button[] button_array;
-
+<<<<<<< HEAD
+=======
     //This is AWESOMEMEEEEEEEE
     // This is Eric Reyna's Disturbing Laptop
+>>>>>>> origin/master
 
     boolean turn=true;//X=true
     int turnC=0;
@@ -46,12 +48,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+<<<<<<< HEAD
+=======
         //TODO: Create the retrieve php file. And work on the another class to retrieve the file - Vishal
         //TODO: Look up other ways to coordinate the TicTacToe game through php and sqlOnline - Vishal
 
 
-
+>>>>>>> origin/master
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
