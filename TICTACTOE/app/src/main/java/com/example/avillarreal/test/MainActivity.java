@@ -17,6 +17,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
+
+import com.android.volley.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     private static final String SavedP1score = "playerscore1";
     private static final String SavedP2score = "playerscore2";
+
 
     Button a1,a2,a3,b1,b2,b3,c1,c2,c3;
     Button[] button_array;
@@ -48,13 +54,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//<<<<<<< HEAD
-//=======
+
         //TODO: Create the retrieve php file. And work on the another class to retrieve the file - Vishal
         //TODO: Look up other ways to coordinate the TicTacToe game through php and sqlOnline - Vishal
 
 
-//>>>>>>> origin/master
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -71,7 +76,33 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         button_array = new Button[]{a1, a2, a3, b1, b2, b3, c1, c2, c3};
 
         for (Button b : button_array) {
-            b.setOnClickListener(this);
+            b.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String A1 = a1.getText().toString();
+                    final String A2 = a2.getText().toString();
+                    final String A3 = a3.getText().toString();
+                    final String B1 = b1.getText().toString();
+                    final String B2 = b2.getText().toString();
+                    final String B3 = b3.getText().toString();
+                    final String C1 = c1.getText().toString();
+                    final String C2 = c2.getText().toString();
+                    final String C3 = c3.getText().toString();
+                    Response.Listener<String> responseListener = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+
+                    ArrayTTC ArraySend = new ArrayTTC(A1,A2,A3,B1,B2,B3,C1,C2,C3,responseListener);
+
+                }
+            });
         }
 
         if (savedInstanceState != null){  //Keeps the score for when you flip screen
@@ -83,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         public void onClick(View v){
             Button b= (Button) v;
             button_clicked(b);
+
         }
 
     public void button_clicked(Button b){ //This is to place the x and o's on the tiles
