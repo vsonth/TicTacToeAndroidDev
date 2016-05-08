@@ -96,14 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             button_clicked(b);
 
         }
-
-    public void button_clicked(Button b){ //This is to place the x and o's on the tiles
-        if (turn){
-            b.setText("X");
-        }
-        else{
-            b.setText("O");
-        }
+    public void SendData(Button b){
         /////// Insert PHP code
         b.setOnClickListener(new OnClickListener() {
             @Override
@@ -117,13 +110,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                 final String C1 = c1.getText().toString();
                 final String C2 = c2.getText().toString();
                 final String C3 = c3.getText().toString();
+                Log.d(TAG,"Created String");
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
-
+                            Log.d(TAG,"ResponseListener");
                             if (success) {
                                 Log.d(TAG,"Success!");
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -153,6 +147,21 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         });
 
         ///////End PHP Code
+
+    }
+
+    public void button_clicked(Button b){ //This is to place the x and o's on the tiles
+        if (turn){
+            b.setText("X");
+            Log.d(TAG, "Pressed X");
+            SendData(b);
+        }
+        else{
+            b.setText("O");
+            Log.d(TAG, "Pressed O");
+            SendData(b);
+        }
+
 
 
 
