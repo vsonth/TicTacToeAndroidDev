@@ -1,6 +1,7 @@
 package com.example.avillarreal.test;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -17,6 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,22 +33,26 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     public final static String player1_score="com.example.avillarreal.test.MainActivity.player1score";
     public final static String player2_score="com.example.avillarreal.test.MainActivity.player2score";
+    public final static String TAG="MainActivity";
 
     private static final String SavedP1score = "playerscore1";
     private static final String SavedP2score = "playerscore2";
 
+
+
+
     Button a1,a2,a3,b1,b2,b3,c1,c2,c3;
     Button[] button_array;
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
     //This is AWESOMEMEEEEEEEE
     // This is Eric Reyna's Disturbing Laptop
->>>>>>> origin/master
+//>>>>>>> origin/master
 
-    boolean turn=true;//X=true
-    int turnC=0;
-    int mPlayer1_score=0;
-    int mPlayer2_score=0;
+    boolean turn=true;   //X=true
+    int turnC=0;        //Tracks how many turns have passed (0-9) before game ends
+    int mPlayer1_score=0;//Score for player 1 that can be added to database
+    int mPlayer2_score=0;//Score for player 2 that can be added to database
 
 
     @Override
@@ -48,13 +60,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
-=======
+
         //TODO: Create the retrieve php file. And work on the another class to retrieve the file - Vishal
         //TODO: Look up other ways to coordinate the TicTacToe game through php and sqlOnline - Vishal
 
 
->>>>>>> origin/master
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -72,9 +84,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
         for (Button b : button_array) {
             b.setOnClickListener(this);
+
         }
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null){  //Keeps the score for when you flip screen
             mPlayer1_score=savedInstanceState.getInt(SavedP1score);
             mPlayer2_score=savedInstanceState.getInt(SavedP2score);
         }
@@ -82,16 +95,65 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
         public void onClick(View v){
             Button b= (Button) v;
+            Log.d(TAG,"Entering Button Clicked");
             button_clicked(b);
+            Log.d(TAG, "Left Button Clicked");
+            final String sA1 = a1.getText().toString();
+            final String sA2 = a2.getText().toString();
+            final String sA3 = a3.getText().toString();
+            final String sB1 = b1.getText().toString();
+            final String sB2 = b2.getText().toString();
+            final String sB3 = b3.getText().toString();
+            final String sC1 = c1.getText().toString();
+            final String sC2 = c2.getText().toString();
+            final String sC3 = c3.getText().toString();
+            Log.d(TAG,"Created String");
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG,"Inside onResponse");
+
+                    try {
+                        Log.d(TAG,"Inside Try");
+                        JSONObject jsonResponse = new JSONObject(response);
+                        Log.d(TAG,"Created jsonResponse");
+                        boolean success = jsonResponse.getBoolean("success");
+                        Log.d(TAG,"ResponseListener");
+                        if (success) {
+                            Log.d(TAG,"Success!");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setMessage("Insert Successful");
+                            builder.setNegativeButton("Continue", null);
+                            builder.create();
+                            builder.show();
+                        } else {
+                            Log.d(TAG,"Failed!");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setMessage("Insert Failed");
+                            builder.setNegativeButton("Retry", null);
+                            builder.create();
+                            builder.show();
+                        }
+                    } catch (JSONException e) {
+                        Log.d(TAG,"Inside Catch");
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            ArrayTTC ArraySend = new ArrayTTC(sA1,sA2, sA3, sB1, sB2, sB3, sC1, sC2, sC3, responseListener);
+
+            RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+            queue.add(ArraySend);
+
         }
 
-    public void button_clicked(Button b){
-        if (turn){
-        b.setText("X");
-        }
-        else{
-            b.setText("O");
-        }
+
+
+
+
+
+
         turnC++;
         b.setClickable(false);
         turn=!turn;
@@ -99,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         checkifWon();
     }
 
-    public void checkifWon(){
+    public void checkifWon(){ //Checks every combination to see if someone wins
 
         boolean winner=false;
         //check row
@@ -132,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         }
 
 
-        if(winner){
+        if(winner){ //If there is a winner, score adds +1 to last player and toasts win message
             if(!turn) {
                 toast("Player 1 Wins");
                 mPlayer1_score=mPlayer1_score+1;
@@ -146,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         }
 
 
-       if(winner==true || turnC==9){
+       if(winner==true || turnC==9){ //Sends to leaderboard page
        Intent intent = new Intent(MainActivity.this,Leaderboard.class);
         intent.putExtra(player1_score,String.valueOf(mPlayer1_score));
         intent.putExtra(player2_score, String.valueOf(mPlayer2_score));
@@ -156,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     }
 
-    private void ButtonEnable(boolean enable){
+    private void ButtonEnable(boolean enable){ //After a win, it disables the buttons
         for(Button b:button_array){
             b.setClickable(enable);
             if(enable)

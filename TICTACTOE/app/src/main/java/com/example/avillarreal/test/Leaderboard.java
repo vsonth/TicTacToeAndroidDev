@@ -54,7 +54,7 @@ NewGame.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(Leaderboard.this,MainActivity.class);
-       // intent.putExtra(newgame,"true");
+        //intent.putExtra(newgame,"true");
         startActivity(intent);
     }
 });
