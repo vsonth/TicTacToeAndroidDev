@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         //TODO: Create the retrieve php file. And work on the another class to retrieve the file - Vishal
         //TODO: Look up other ways to coordinate the TicTacToe game through php and sqlOnline - Vishal
 
+        
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -80,51 +81,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
         for (Button b : button_array) {
             b.setOnClickListener(this);
-            b.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final String A1 = a1.getText().toString();
-                    final String A2 = a2.getText().toString();
-                    final String A3 = a3.getText().toString();
-                    final String B1 = b1.getText().toString();
-                    final String B2 = b2.getText().toString();
-                    final String B3 = b3.getText().toString();
-                    final String C1 = c1.getText().toString();
-                    final String C2 = c2.getText().toString();
-                    final String C3 = c3.getText().toString();
-                    Response.Listener<String> responseListener = new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                boolean success = jsonResponse.getBoolean("success");
 
-                                if(success){
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                    builder.setMessage("Insert Successful");
-                                    builder.setNegativeButton("Continue", null);
-                                    builder.create();
-                                    builder.show();
-                                }
-                                else{
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                    builder.setMessage("Insert Failed");
-                                    builder.setNegativeButton("Retry", null);
-                                    builder.create();
-                                    builder.show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    };
-
-                    ArrayTTC ArraySend = new ArrayTTC(A1,A2,A3,B1,B2,B3,C1,C2,C3,responseListener);
-                    RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                    queue.add(ArraySend);
-
-                }
-            });
         }
 
         if (savedInstanceState != null){  //Keeps the score for when you flip screen
@@ -146,6 +103,57 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         else{
             b.setText("O");
         }
+        /////// Insert PHP code
+        /*b.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {*/
+                final String A1 = a1.getText().toString();
+                final String A2 = a2.getText().toString();
+                final String A3 = a3.getText().toString();
+                final String B1 = b1.getText().toString();
+                final String B2 = b2.getText().toString();
+                final String B3 = b3.getText().toString();
+                final String C1 = c1.getText().toString();
+                final String C2 = c2.getText().toString();
+                final String C3 = c3.getText().toString();
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+
+                            if (success) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                builder.setMessage("Insert Successful");
+                                builder.setNegativeButton("Continue", null);
+                                builder.create();
+                                builder.show();
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                builder.setMessage("Insert Failed");
+                                builder.setNegativeButton("Retry", null);
+                                builder.create();
+                                builder.show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
+                ArrayTTC ArraySend = new ArrayTTC(A1, A2, A3, B1, B2, B3, C1, C2, C3, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                queue.add(ArraySend);
+
+      /*      }
+        });*/
+
+        ///////End PHP Code
+
+
+
+
         turnC++;
         b.setClickable(false);
         turn=!turn;
