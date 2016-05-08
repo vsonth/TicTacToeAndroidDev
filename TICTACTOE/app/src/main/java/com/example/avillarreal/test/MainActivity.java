@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     public final static String player1_score="com.example.avillarreal.test.MainActivity.player1score";
     public final static String player2_score="com.example.avillarreal.test.MainActivity.player2score";
+    public final static String TAG="MainActivity";
 
     private static final String SavedP1score = "playerscore1";
     private static final String SavedP2score = "playerscore2";
@@ -124,12 +125,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                             boolean success = jsonResponse.getBoolean("success");
 
                             if (success) {
+                                Log.d(TAG,"Success!");
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                 builder.setMessage("Insert Successful");
                                 builder.setNegativeButton("Continue", null);
                                 builder.create();
                                 builder.show();
                             } else {
+                                Log.d(TAG,"Failed!");
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                 builder.setMessage("Insert Failed");
                                 builder.setNegativeButton("Retry", null);
