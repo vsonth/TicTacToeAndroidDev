@@ -1,6 +1,7 @@
 package com.example.avillarreal.test;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -18,7 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         button_array = new Button[]{a1, a2, a3, b1, b2, b3, c1, c2, c3};
 
         for (Button b : button_array) {
+            b.setOnClickListener(this);
             b.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -93,6 +97,22 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                         public void onResponse(String response) {
                             try {
                                 JSONObject jsonResponse = new JSONObject(response);
+                                boolean success = jsonResponse.getBoolean("success");
+
+                                if(success){
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setMessage("Insert Successful");
+                                    builder.setNegativeButton("Continue", null);
+                                    builder.create();
+                                    builder.show();
+                                }
+                                else{
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setMessage("Insert Failed");
+                                    builder.setNegativeButton("Retry", null);
+                                    builder.create();
+                                    builder.show();
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -100,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                     };
 
                     ArrayTTC ArraySend = new ArrayTTC(A1,A2,A3,B1,B2,B3,C1,C2,C3,responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                    queue.add(ArraySend);
 
                 }
             });
