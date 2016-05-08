@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     private static final String SavedP2score = "playerscore2";
 
 
+
+
     Button a1,a2,a3,b1,b2,b3,c1,c2,c3;
     Button[] button_array;
 //<<<<<<< HEAD
@@ -93,74 +95,60 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
         public void onClick(View v){
             Button b= (Button) v;
+            Log.d(TAG,"Entering Button Clicked");
             button_clicked(b);
+            Log.d(TAG, "Left Button Clicked");
+            final String sA1 = a1.getText().toString();
+            final String sA2 = a2.getText().toString();
+            final String sA3 = a3.getText().toString();
+            final String sB1 = b1.getText().toString();
+            final String sB2 = b2.getText().toString();
+            final String sB3 = b3.getText().toString();
+            final String sC1 = c1.getText().toString();
+            final String sC2 = c2.getText().toString();
+            final String sC3 = c3.getText().toString();
+            Log.d(TAG,"Created String");
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG,"Inside onResponse");
 
-        }
-    public void SendData(Button b){
-        /////// Insert PHP code
-        b.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String A1 = a1.getText().toString();
-                final String A2 = a2.getText().toString();
-                final String A3 = a3.getText().toString();
-                final String B1 = b1.getText().toString();
-                final String B2 = b2.getText().toString();
-                final String B3 = b3.getText().toString();
-                final String C1 = c1.getText().toString();
-                final String C2 = c2.getText().toString();
-                final String C3 = c3.getText().toString();
-                Log.d(TAG,"Created String");
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                            Log.d(TAG,"ResponseListener");
-                            if (success) {
-                                Log.d(TAG,"Success!");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                builder.setMessage("Insert Successful");
-                                builder.setNegativeButton("Continue", null);
-                                builder.create();
-                                builder.show();
-                            } else {
-                                Log.d(TAG,"Failed!");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                builder.setMessage("Insert Failed");
-                                builder.setNegativeButton("Retry", null);
-                                builder.create();
-                                builder.show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    try {
+                        Log.d(TAG,"Inside Try");
+                        JSONObject jsonResponse = new JSONObject(response);
+                        Log.d(TAG,"Created jsonResponse");
+                        boolean success = jsonResponse.getBoolean("success");
+                        Log.d(TAG,"ResponseListener");
+                        if (success) {
+                            Log.d(TAG,"Success!");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setMessage("Insert Successful");
+                            builder.setNegativeButton("Continue", null);
+                            builder.create();
+                            builder.show();
+                        } else {
+                            Log.d(TAG,"Failed!");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setMessage("Insert Failed");
+                            builder.setNegativeButton("Retry", null);
+                            builder.create();
+                            builder.show();
                         }
+                    } catch (JSONException e) {
+                        Log.d(TAG,"Inside Catch");
+                        e.printStackTrace();
                     }
-                };
+                }
+            };
 
-                ArrayTTC ArraySend = new ArrayTTC(A1, A2, A3, B1, B2, B3, C1, C2, C3, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                queue.add(ArraySend);
+            ArrayTTC ArraySend = new ArrayTTC(sA1,sA2, sA3, sB1, sB2, sB3, sC1, sC2, sC3, responseListener);
 
-            }
-        });
+            RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+            queue.add(ArraySend);
 
-        ///////End PHP Code
-
-    }
-
-    public void button_clicked(Button b){ //This is to place the x and o's on the tiles
-        if (turn){
-            b.setText("X");
-            Log.d(TAG, "Pressed X");
-            SendData(b);
         }
-        else{
-            b.setText("O");
-            Log.d(TAG, "Pressed O");
-            SendData(b);
-        }
+
+
 
 
 
