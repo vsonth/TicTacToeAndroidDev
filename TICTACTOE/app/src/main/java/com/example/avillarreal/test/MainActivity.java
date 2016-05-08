@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             b.setText("O");
         }
         /////// Insert PHP code
-        /*b.setOnClickListener(new OnClickListener() {
+        b.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {*/
+            public void onClick(View v) {
                 final String A1 = a1.getText().toString();
                 final String A2 = a2.getText().toString();
                 final String A3 = a3.getText().toString();
@@ -146,8 +146,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                 RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                 queue.add(ArraySend);
 
-      /*      }
-        });*/
+           }
+        });
 
         ///////End PHP Code
 
