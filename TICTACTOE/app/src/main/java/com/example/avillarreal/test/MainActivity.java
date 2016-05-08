@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     public void button_clicked(Button b){ //This is to place the x and o's on the tiles
         if (turn){
-        b.setText("X");
+            b.setText("X");
         }
         else{
             b.setText("O");
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                 RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                 queue.add(ArraySend);
 
-           }
+            }
         });
 
         ///////End PHP Code
