@@ -93,58 +93,62 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
         public void onClick(View v){
             Button b= (Button) v;
+            Log.d(TAG,"Entering button clicked");
             button_clicked(b);
+            Log.d(TAG,"after button_clicked");
 
         }
-    public void SendData(Button b){
+        public void SendData(Button b){
         /////// Insert PHP code
-        b.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String A1 = a1.getText().toString();
-                final String A2 = a2.getText().toString();
-                final String A3 = a3.getText().toString();
-                final String B1 = b1.getText().toString();
-                final String B2 = b2.getText().toString();
-                final String B3 = b3.getText().toString();
-                final String C1 = c1.getText().toString();
-                final String C2 = c2.getText().toString();
-                final String C3 = c3.getText().toString();
-                Log.d(TAG,"Created String");
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                            Log.d(TAG,"ResponseListener");
-                            if (success) {
-                                Log.d(TAG,"Success!");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                builder.setMessage("Insert Successful");
-                                builder.setNegativeButton("Continue", null);
-                                builder.create();
-                                builder.show();
-                            } else {
-                                Log.d(TAG,"Failed!");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                builder.setMessage("Insert Failed");
-                                builder.setNegativeButton("Retry", null);
-                                builder.create();
-                                builder.show();
+            Log.d(TAG,"Inside SendData");
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String A1 = a1.getText().toString();
+                    final String A2 = a2.getText().toString();
+                    final String A3 = a3.getText().toString();
+                    final String B1 = b1.getText().toString();
+                    final String B2 = b2.getText().toString();
+                    final String B3 = b3.getText().toString();
+                    final String C1 = c1.getText().toString();
+                    final String C2 = c2.getText().toString();
+                    final String C3 = c3.getText().toString();
+                    Log.d(TAG, "Created String");
+                    Response.Listener<String> responseListener = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, "Went inside response listener");
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                                boolean success = jsonResponse.getBoolean("success");
+                                Log.d(TAG, "ResponseListener");
+                                if (success) {
+                                    Log.d(TAG, "Success!");
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setMessage("Insert Successful");
+                                    builder.setNegativeButton("Continue", null);
+                                    builder.create();
+                                    builder.show();
+                                } else {
+                                    Log.d(TAG, "Failed!");
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setMessage("Insert Failed");
+                                    builder.setNegativeButton("Retry", null);
+                                    builder.create();
+                                    builder.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                };
+                    };
+                    Log.d(TAG, "After OnResponse");
+                    ArrayTTC ArraySend = new ArrayTTC(A1, A2, A3, B1, B2, B3, C1, C2, C3, responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                    queue.add(ArraySend);
 
-                ArrayTTC ArraySend = new ArrayTTC(A1, A2, A3, B1, B2, B3, C1, C2, C3, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                queue.add(ArraySend);
-
-            }
-        });
+                }
+            });
 
         ///////End PHP Code
 
@@ -155,16 +159,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             b.setText("X");
             Log.d(TAG, "Pressed X");
             SendData(b);
+            Log.d(TAG,"After SendData");
         }
         else{
             b.setText("O");
             Log.d(TAG, "Pressed O");
             SendData(b);
+            Log.d(TAG, "After SendData");
         }
-
-
-
-
 
         turnC++;
         b.setClickable(false);
