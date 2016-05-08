@@ -37,6 +37,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     private static final String SavedP1score = "playerscore1";
     private static final String SavedP2score = "playerscore2";
+    String A1;
+    String A2;
+    String A3;
+    String B1;
+    String B2;
+    String B3;
+    String C1;
+    String C2;
+    String C3;
 
 
     Button a1,a2,a3,b1,b2,b3,c1,c2,c3;
@@ -68,22 +77,22 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        a1 = (Button) findViewById(R.id.A1);
-        a2 = (Button) findViewById(R.id.A2);
-        a3 = (Button) findViewById(R.id.A3);
-        b1 = (Button) findViewById(R.id.B1);
-        b2 = (Button) findViewById(R.id.B2);
-        b3 = (Button) findViewById(R.id.B3);
-        c1 = (Button) findViewById(R.id.C1);
-        c2 = (Button) findViewById(R.id.C2);
-        c3 = (Button) findViewById(R.id.C3);
+        /*Button a1 = (Button) findViewById(R.id.A1);
+        Button a2 = (Button) findViewById(R.id.A2);
+        Button a3 = (Button) findViewById(R.id.A3);
+        Button b1 = (Button) findViewById(R.id.B1);
+        Button b2 = (Button) findViewById(R.id.B2);
+        Button b3 = (Button) findViewById(R.id.B3);
+        Button c1 = (Button) findViewById(R.id.C1);
+        Button c2 = (Button) findViewById(R.id.C2);
+        Button c3 = (Button) findViewById(R.id.C3);*/
 
-        button_array = new Button[]{a1, a2, a3, b1, b2, b3, c1, c2, c3};
+        //button_array = new Button[]{a1, a2, a3, b1, b2, b3, c1, c2, c3};
 
-        for (Button b : button_array) {
+        /*for (Button b : button_array) {
             b.setOnClickListener(this);
 
-        }
+        }*/
 
         if (savedInstanceState != null){  //Keeps the score for when you flip screen
             mPlayer1_score=savedInstanceState.getInt(SavedP1score);
@@ -92,11 +101,79 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     }
 
         public void onClick(View v){
-            Button b= (Button) v;
-            Log.d(TAG,"Entering button clicked");
-            button_clicked(b);
-            Log.d(TAG,"after button_clicked");
+            Button a1 = (Button) findViewById(R.id.A1);
+            Button a2 = (Button) findViewById(R.id.A2);
+            Button a3 = (Button) findViewById(R.id.A3);
+            Button b1 = (Button) findViewById(R.id.B1);
+            Button b2 = (Button) findViewById(R.id.B2);
+            Button b3 = (Button) findViewById(R.id.B3);
+            Button c1 = (Button) findViewById(R.id.C1);
+            Button c2 = (Button) findViewById(R.id.C2);
+            Button c3 = (Button) findViewById(R.id.C3);
+            if (v.getId() == R.id.A1) {
+                Button b = (Button) v;
+                if (turn){
+                    b.setText("X");
+                    Log.d(TAG, "Pressed X");
+                    A1 = a1.getText().toString();
+                    //A2 = a2.getText().toString();
+                    //A3 = a3.getText().toString();
+                    //B1 = b1.getText().toString();
+                    //B2 = b2.getText().toString();
+                    //B3 = b3.getText().toString();
+                    //C1 = c1.getText().toString();
+                    //C2 = c2.getText().toString();
+                    //C3 = c3.getText().toString();
+                    Log.d(TAG, "Created String");
+                    Response.Listener<String> responseListener = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, "Went inside response listener");
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                                boolean success = jsonResponse.getBoolean("success");
+                                Log.d(TAG, "ResponseListener");
+                                if (success) {
+                                    Log.d(TAG, "Success!");
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setMessage("Insert Successful");
+                                    builder.setNegativeButton("Continue", null);
+                                    builder.create();
+                                    builder.show();
+                                } else {
+                                    Log.d(TAG, "Failed!");
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setMessage("Insert Failed");
+                                    builder.setNegativeButton("Retry", null);
+                                    builder.create();
+                                    builder.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    Log.d(TAG, "After OnResponse");
+                    ArrayTTC ArraySend = new ArrayTTC(A1, A2, A3, B1, B2, B3, C1, C2, C3, responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                    queue.add(ArraySend);
 
+                    //SendData(b);
+                    Log.d(TAG,"After SendData");
+                }
+                else{
+                    b.setText("O");
+                    Log.d(TAG, "Pressed O");
+                    //SendData(b);
+                    Log.d(TAG, "After SendData");
+                }
+
+                turnC++;
+                b.setClickable(false);
+                turn=!turn;
+
+                //checkifWon(); //not yet
+            }
         }
         public void SendData(Button b){
         /////// Insert PHP code
